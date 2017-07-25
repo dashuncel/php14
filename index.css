@@ -1,0 +1,228 @@
+body {
+    background: #555;
+    font: 1em/1.25 trebuchet ms, verdana, sans-serif;
+    color: #fff;
+}
+
+
+table {
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 4em auto;
+    border-collapse: collapse;
+    min-width: 23em;
+    width: 70%;
+    max-width: 56em;
+    border-radius: .5em;
+    box-shadow: 0 0 .5em #000;
+}
+
+th[data-sort='asc']:after {
+    content: "△";
+    color: honeydew;
+    padding-left: 20px;
+    font-size: 8px;
+}
+
+[data-sort='desc']:after {
+    content: "▽";
+    color: honeydew;
+    padding-left: 20px;
+    font-size: 10px;
+}
+
+tbody > tr:nth-child(2n) {
+    background: linear-gradient(135deg, burlywood, gray);
+}
+
+tbody >  tr:nth-child(2n+1) {
+    background: linear-gradient(135deg, darkgray, dimgrey);
+}
+
+thead {
+    background: linear-gradient(#606060, #28262b);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+th {
+    text-align: center;
+    height: 30px;
+}
+
+
+tr {
+    text-align: center;
+}
+
+.last {
+    border : none;
+}
+
+.done:before {
+    content: "◉";
+    color: #1f3c52;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.undone:before {
+    content: "◎";
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+[type='button'] {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    padding: .5em 2em;
+    outline: none;
+    border-width: 2px 0;
+    background: linear-gradient(burlywood, gray);
+    transition: 0.2s;
+    height: 50px;
+    margin: 5px;
+
+    border-style: solid none;
+    border-color: #FDBE33 #000 slategrey  ;
+    border-radius: .5em;
+    box-shadow: 0 0 .5em #000;
+    text-transform: uppercase;
+    font: 1em/1.25 trebuchet ms, verdana, sans-serif;
+}
+
+[type='button']:hover {
+    background: linear-gradient(orange, dimgray);
+    transform:  translateY(1px) translateX(1px);
+}
+
+//модальное окошко:
+  .blur{
+      -webkit-filter: blur(5px);
+      -moz-filter: blur(5px);
+      -o-filter: blur(5px);
+      -ms-filter: blur(5px);
+      filter: blur(5px);
+  }
+
+.modal-wrapper{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0; left:0;
+    background: gray;
+    visibility:hidden;
+    opacity:0;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.modal-wrapper.open{
+    opacity:1;
+    visibility:visible;
+}
+
+.modal{
+    width:600px;
+    height:300px;
+    display:block;
+    margin:50% 0 0 -300px;
+    position:relative;
+    top:50%; left:50%;
+    background: burlywood;
+    opacity:0;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+
+.modal-wrapper.open .modal{
+    margin-top:-150px;
+    opacity:1;
+}
+
+
+.btn-close{
+    width:32px;
+    height:32px;
+    display:block;
+    float:right;
+}
+
+.btn-close::before, .btn-close::after{
+    content:'';
+    width:32px;
+    height:6px;
+    display:block;
+    background:#fff;
+}
+
+.btn-close::before{
+    margin-top:12px;
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+
+.btn-close::after{
+    margin-top:-6px;
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    -o-transform:rotate(-45deg);
+    transform:rotate(-45deg);
+}
+
+.head{
+    width:90%;
+    height:32px;
+    padding:1.5em 5%;
+    overflow:hidden;
+    background: darkgoldenrod;
+    font-family: Arial;
+    color: #fff;
+    font-size: 2em;
+}
+
+form {
+    margin : 20px;
+}
+
+textarea {
+    border-radius: .5em;
+    background-color : lightgrey;
+}
+
+
+caption {
+    line-height: 50px;
+    font-size: 30px;
+    font: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+
+.exit {
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Franklin Gothic Medium";
+    transition: 0.4s ease-in-out;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #bf6900;
+}
+
+.exit:hover {
+    color: whitesmoke;
+}
