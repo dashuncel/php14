@@ -6,4 +6,3 @@ if (isAutorized()) {
 }
 header("Location: login.php");
 
-?>

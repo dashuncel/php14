@@ -209,6 +209,12 @@ caption {
 }
 
 .exit {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.exit p > a {
     display: inline-block;
     text-decoration: none;
     text-transform: uppercase;
@@ -217,12 +223,9 @@ caption {
     font-weight: bold;
     font-family: "Franklin Gothic Medium";
     transition: 0.4s ease-in-out;
-    position: absolute;
-    right: 15px;
-    top: 15px;
     color: #bf6900;
 }
 
-.exit:hover {
+.exit a:hover {
     color: whitesmoke;
 }

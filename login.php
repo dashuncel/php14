@@ -1,7 +1,11 @@
 <?php
 require_once __DIR__.DIRECTORY_SEPARATOR.'lib.php';
 
-if (isset($_POST['enter']) ||(isset($_POST['reg']))) {
+if (isAutorized()) {
+    header('Location: index.php');
+}
+
+if (isset($_POST['enter']) || (isset($_POST['reg']))) {
     unset($errors);
 
     if (!isset($_POST['password']) || (!isset($_POST['login']))) {
@@ -50,11 +54,19 @@ if (isset($_POST['enter']) ||(isset($_POST['reg']))) {
         <input type="name" name="login" required>
         <label for="username">Пароль:</label>
         <input type="password" name="password" required>
+        <div id="errors">
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
         <div id="lower">
             <input type="submit" name="reg" value="Регистрация">
             <input type="submit" name="enter" value="Войти">
         </div>
     </form>
 </div>
-<p class = "errors">Ошибки формы: <?php var_dump($errors);?></p>
+
+</body>
 </html>

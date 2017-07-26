@@ -5,15 +5,15 @@ session_start();
 
 $host='localhost';
 $dbport=3306;
-
+/*
 $user=LOGIN;
 $password=PASSWD;
 $database=LOGIN;
-/*
+*/
 $user='root';
 $password='';
 $database='global';
-*/
+
 $errors=[];
 
 /* данные запросы не пересекаются благодаря условию, накладываемому на поле task.user_id

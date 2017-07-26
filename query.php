@@ -90,4 +90,3 @@ if (isset($_POST['sort']) && isset($_POST['column'])) {
 // обновляем текущий запрос в таблице:
 echo prepareTable($query, $delegate);
 
-?>

@@ -28,7 +28,11 @@ if (! isAutorized()) {
 </div>
 <div class="page-wrapper">
     <input type="button" class="trigger adder" value="Добавить новое дело" name="add">
-    <a href="exit.php" class="exit">Выход</a>
+    <div class="exit">
+        <p>Здравствуй, <?= $_SESSION['login'] ?>
+            <a href="exit.php">Выход</a>
+        </p>
+    </div>
     <table>
         <caption>Список дел пользователя <?php echo $_SESSION['login'] ?></caption>
         <thead class="tab1">
@@ -91,9 +95,9 @@ if (! isAutorized()) {
 
     // обработчик клика на заголовке таблицы (сортировка):
     $('th').click(function(event){
-        desc = $(event.target).data('sort');
-        col = $(event.target).data('col');
-        tab = $(event.target).parentsUntil('table').last().attr('class');
+        event.target.dataset.sort = (event.target.dataset.sort == "asc") ? "desc" : "asc"; // меняем направление сортировки
+        desc = event.currentTarget.dataset.sort;
+        col = event.currentTarget.dataset.col;
 
         // если направление сортировки на кликнутой колонке не указано, выходим без запроса:
         if (desc === undefined) {
@@ -102,16 +106,16 @@ if (! isAutorized()) {
 
         // собираем прочие направления сортировки по колонкам:
         $('[data-sort*="sc"]').each(function (i, val) {
-                    if (event.currentTarget != val) {
-                        desc += ',' + val.dataset.sort;
-                        col += ',' + val.dataset.col;
+            if (event.currentTarget != val) {
+                desc += ',' + val.dataset.sort;
+                col += ',' + val.dataset.col;
             }
         });
+
         $.post("query.php",
                 { typeQuery: "sort", sort: desc, column : col, numQuery: tab},
                 function(data, result){
                     setData(data, tab);
-                    event.target.dataset.sort = (event.target.dataset.sort == "asc") ? "desc" : "asc"; // меняем направление сортировки
                 }
         );
     });
@@ -125,7 +129,7 @@ if (! isAutorized()) {
             let done = (event.target.classList[0] == "undone") ? "1" : "0";
             id = event.target.parentNode.id;
             $.post("query.php",
-                {typeQuery: "update", id: id, done : done, numQuery: tab},
+                {typeQuery: "update", id: id, done : done, numQuery: tab, sort: desc, column : col},
                 function(data, status) {
                     setData(data, tab);
                 }
@@ -135,7 +139,7 @@ if (! isAutorized()) {
         if (event.target.tagName == 'IMG' && event.target.parentNode.classList[0] == 'del') {
             id = $(event.target).parentsUntil('tbody').last().attr('id');
             $.post("query.php",
-                 {typeQuery: "delete", id : id, numQuery: tab},
+                 {typeQuery: "delete", id : id, numQuery: tab, sort: desc, column : col},
                  function(data, result) {
                      $('tbody.' +  tab).html(data); //тут так, т.к. когда удаляем последннюю, виджет не обновляется :((
                  }
@@ -153,12 +157,11 @@ if (! isAutorized()) {
 
         if (event.target.tagName == 'IMG' && event.target.parentNode.classList[0] == 'delegate') {
             id = $(event.target).parentsUntil('tbody').last().attr('id');
-            let val= $('select').val();
-            console.log(val);
+            let val= $(event.target).parent('a').next('select').val();
             $.post("query.php",
-                {typeQuery: "update", id : id, numQuery: tab, assigned: val},
+                {typeQuery: "update", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
                 function(data, result) {
-                    $('tbody.' +  tab).html(data); //тут так, т.к. когда удаляем последннюю, виджет не обновляется :((
+                    setData(data, tab);
                 }
             );
         }
@@ -179,15 +182,15 @@ if (! isAutorized()) {
     });
 
     $('.creater').click(function(event) {
-        let desc = $('textarea').val();
+        let value = $('textarea').val();
         $.post("query.php",
-            {typeQuery: typeQuery, description: desc, id: id , numQuery: tab},
+            {typeQuery: typeQuery, description: value, id: id , numQuery: tab, sort: desc, column : col},
             function(data, result){
                 setData(data, tab);
             }
         );
     });
-    
+
     function showModal() {
         $('.modal-wrapper').toggleClass('open');
         $('.page-wrapper').toggleClass('blur');
@@ -196,7 +199,7 @@ if (! isAutorized()) {
     function setSort() {
         desc='';
         col='';
-        $('[data-sort*="sc"]').each(function (i, val) {
+        $('th[data-sort*="sc"]').each(function (i, val) {
             if (desc !== '') {desc += ","; }
             if (col !== '') {col += ","; }
             desc += val.dataset.sort;
