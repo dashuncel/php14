@@ -5,15 +5,15 @@ session_start();
 
 $host='localhost';
 $dbport=3306;
-/*
+
 $user=LOGIN;
 $password=PASSWD;
 $database=LOGIN;
-*/
+/*
 $user='root';
 $password='';
 $database='global';
-
+*/
 $errors=[];
 
 /* данные запросы не пересекаются благодаря условию, накладываемому на поле task.user_id
@@ -121,7 +121,7 @@ function prepareTable($query, $delegate) {
 function login($login, $passwd, $mode) {
     global $pdo;
     global $errors;
-    $id=0; // айди юзера
+    $id = 0; // айди юзера
 
     switch ($mode) {
         case "1":
@@ -198,7 +198,28 @@ function isAutorized() {
     return !empty($_SESSION['user_id']);
 }
 
+function currentUser() {
+    return $_SESSION['user_id'];
+}
+
 function logout()
 {
     return session_destroy();
+}
+
+// проверка пользователя записи по id
+function chkUser($id) {
+    global $pdo;
+    try {
+        $statement = $pdo->prepare('SELECT login FROM user JOIN task ON user.id = task.assigned_user_id WHERE task.id = ?');
+        $statement->execute([$id]);
+    }
+    catch (PDOException $e) {
+        $result = "Ошибка отправки запроса проверки пользователя к БД: ".$e->getMessage().'<br/>';
+        return $result;
+    }
+    $rows=$statement->fetchAll();
+    foreach ($rows as $row) {
+        return $row['login'];
+    }
 }

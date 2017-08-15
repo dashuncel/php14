@@ -29,7 +29,7 @@ if (! isAutorized()) {
 <div class="page-wrapper">
     <input type="button" class="trigger adder" value="Добавить новое дело" name="add">
     <div class="exit">
-        <p>Здравствуй, <?= $_SESSION['login'] ?>
+        <p>Здравствуй, <?= $_SESSION['login'] ?>&nbsp;&nbsp;
             <a href="exit.php">Выход</a>
         </p>
     </div>
@@ -40,7 +40,7 @@ if (! isAutorized()) {
            <th data-sort="asc" data-col="date_added">Дата</th>
            <th data-sort="asc" data-col="description">Дело</th>
            <th data-sort="asc" data-col="is_done">Статус</th>
-            <th data-col="user">Исполнитель</th>
+            <th data-sort="asc" data-col="login">Исполнитель</th>
            <th>Действия</th>
         </tr>
         </thead>
@@ -50,13 +50,13 @@ if (! isAutorized()) {
     </table>
 
     <table>
-        <caption>Список дел, делигированных пользователю <?php echo $_SESSION['login'] ?> </caption>
+        <caption>Список делегированных пользователю <?php echo $_SESSION['login'] ?> </caption>
         <thead class="tab2">
         <tr>
             <th data-sort="asc" data-col="date_added">Дата</th>
             <th data-sort="asc" data-col="description">Дело</th>
             <th data-sort="asc" data-col="is_done">Статус</th>
-            <th data-col="user">Делегировано кем</th>
+            <th data-sort="asc" data-col="login">Делегировано кем</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -95,17 +95,18 @@ if (! isAutorized()) {
 
     // обработчик клика на заголовке таблицы (сортировка):
     $('th').click(function(event){
-        event.target.dataset.sort = (event.target.dataset.sort == "asc") ? "desc" : "asc"; // меняем направление сортировки
-        desc = event.currentTarget.dataset.sort;
-        col = event.currentTarget.dataset.col;
-
         // если направление сортировки на кликнутой колонке не указано, выходим без запроса:
+        desc = event.target.dataset.sort;
+        col = event.target.dataset.col;
         if (desc === undefined) {
             return;
         }
 
+        event.target.dataset.sort = (event.target.dataset.sort == "asc") ? "desc" : "asc"; // меняем направление сортировки
+        tab = $(event.target).parentsUntil('table').last().attr('class');
+
         // собираем прочие направления сортировки по колонкам:
-        $('[data-sort*="sc"]').each(function (i, val) {
+        $('.' + tab + ' [data-sort*="sc"]').each(function (i, val) {
             if (event.currentTarget != val) {
                 desc += ',' + val.dataset.sort;
                 col += ',' + val.dataset.col;
@@ -131,6 +132,7 @@ if (! isAutorized()) {
             $.post("query.php",
                 {typeQuery: "update", id: id, done : done, numQuery: tab, sort: desc, column : col},
                 function(data, status) {
+                    console.log(data);
                     setData(data, tab);
                 }
             );
