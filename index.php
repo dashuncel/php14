@@ -48,6 +48,7 @@ if (! isAutorized()) {
         <?php echo prepareTable($mainQuery_tab1, true) ?>
         </tbody>
     </table>
+    <output class = 'tab1'></output>
 
     <table>
         <caption>Список делегированных пользователю <?php echo $_SESSION['login'] ?> </caption>
@@ -64,6 +65,7 @@ if (! isAutorized()) {
         <?php echo prepareTable($mainQuery_tab2, false) ?>
         </tbody>
     </table>
+    <output class = 'tab2'></output>
 
     <div>
     <dl>
@@ -143,7 +145,7 @@ if (! isAutorized()) {
             $.post("query.php",
                  {typeQuery: "delete", id : id, numQuery: tab, sort: desc, column : col},
                  function(data, result) {
-                     $('tbody.' +  tab).html(data); //тут так, т.к. когда удаляем последннюю, виджет не обновляется :((
+                     setData(data, tab);
                  }
             );
         }
@@ -211,7 +213,12 @@ if (! isAutorized()) {
 
     function setData(data, tabClass) {
         if (data !== 'undefined' && data.length > 0) {
-            $('tbody.' + tabClass).html(data);
+            if (data.substr(0,1) === '<') {
+                $('tbody.' + tabClass).html(data);
+            }
+            else {
+                $('output.' + tabClass).text(data);
+            }
         }
     }
 
